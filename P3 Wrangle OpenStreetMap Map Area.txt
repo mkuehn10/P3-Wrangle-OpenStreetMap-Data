@@ -1,0 +1,6 @@
+I chose to use data from Walt Disney World in Florida obtained from a data set on the Map Zen Metro Extracts pages.
+I chose this data since I have been to Walt Disney World many times and was interested to see what type of map data there
+would be for this area since Walt Disney World is primarily a set of theme parks, but it can also be considered its own
+city due to the many resorts, restaurants, and other amenities located throughout the Walt Disney World property.
+
+https://s3.amazonaws.com/metro-extracts.mapzen.com/walt-disney-world_florida.osm.bz2

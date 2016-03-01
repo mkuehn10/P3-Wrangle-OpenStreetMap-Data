@@ -1,0 +1,6 @@
+Walt Disney World OSM data obtained from https://s3.amazonaws.com/metro-extracts.mapzen.com/walt-disney-world_florida.osm.bz2
+
+Lesson 6 code was referenced and modified from http://fch808.github.io/Data%20Wrangling%20with%20MongoDB%20-%20Exercises.html
+
+Regular expression to help with parsing zip codes references from http://stackoverflow.com/a/23393885
+
