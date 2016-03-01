@@ -1,4 +1,4 @@
-[Wrangle OpenStreetMapData Report](P3 Wrangle OpenStreetMap Data Report.pdf)
+## [Wrangle OpenStreetMapData Report](P3 Wrangle OpenStreetMap Data Report.pdf)
 
 ```python
 # Lesson 6 - Iterative Parsing Code
