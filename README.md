@@ -1,9 +1,10 @@
-## [Wrangle OpenStreetMapData Report](P3 Wrangle OpenStreetMap Data Report.pdf)
+## [Wrangle OpenStreetMapData Report](P3 Wrangle OpenStreetMap Data Report.pdf)   
+
 
 ```python
 # Lesson 6 - Iterative Parsing Code
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
 """
 Your task is to use the iterative parsing to process the map file and
 find out not only what tags are there, but also how many, to get the
@@ -191,15 +192,6 @@ def process_map_users(filename):
             users.add(get_user(element))
 
     return users, usernames
-
-# def test():
-
-#     users, usernames = process_map_users('example3.osm')
-#     pprint.pprint(users)
-#     assert len(users) == 6
-
-# if __name__ == "__main__":
-#     test()
 ```
 
 
@@ -294,6 +286,10 @@ def is_postcode(elem):
     Returns:
         (boolean): True if the element is a postal code, False otherwise.
     """
+    #if elem.attrib['k'] == "addr:postcode":
+    #    print "found postal code" + elem.attrib['v']
+    #else:
+    #    print "not postal code " + elem.attrib['v']
     return (elem.attrib['k'] == "addr:postcode")
 
 # Exploring Postal Codes, City Names, and Latitude/Longitude
@@ -336,17 +332,17 @@ def audit(osmfile):
     
     out_of_bounds = []
     
-    
-    for event, elem in ET.iterparse(osm_file, events=("start",)):
-
+    for event, elem in ET.iterparse(osm_file, events=("start", "end")):
+        
         if elem.tag == "node" or elem.tag == "way":
             
             if "lat" in elem.attrib.keys():
+                
                     audit_lat_long(elem)
-                    
             
             for tag in elem.iter("tag"):
-            
+                
+                
                 if is_street_name(tag):
                     
                     audit_street_type(street_types, tag.attrib['v'])
@@ -356,13 +352,12 @@ def audit(osmfile):
                     cities.add(tag.attrib['v'])
                 
                 elif is_postcode(tag):
-                    
+                
                     postcodes.add(tag.attrib['v'])
-                            
+                           
     osm_file.close()
     
     return street_types
-
 
 def update_name(name, mapping):
     """
@@ -398,8 +393,8 @@ print cities
 print postcodes
 ```
 
-    set(['Windermere', 'Bay Lake', 'Orlando', 'Lake Buena Vista,', 'Lake Buena Vista', 'Kissimmee', 'Davenport', 'Celebration'])
-    set(['32821', '32836', '34786', '34769', '32830-8424', '33896', '32830-8400', 'FL 34747', '34741', '32832', '32830', '34747', '34746'])
+    set(['Windermere', 'Orlando', 'Lake Buena Vista,', 'Bay Lake', 'Kissimmee', 'Celebration', 'Davenport', 'Lake Buena Vista'])
+    set(['32821', '32836', '32830-8446', '34786', '32830-8514', '34769', '32830-8424', '32830-8421', '33896', '32830-8400', 'FL 34747', '34741', '32830-8433', '32830-8411', '32832', '32830', '34747', '34746'])
     
 
 
@@ -977,23 +972,33 @@ def get_element(osm_file, tags=('node', 'way', 'relation')):
     http://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
     """
     context = ET.iterparse(osm_file, events=('start', 'end'))
+    
     _, root = next(context)
+    
     for event, elem in context:
+        
         if event == 'end' and elem.tag in tags:
+            
             yield elem
+            
             root.clear()
 
-
+#postals = set()
 with open(SAMPLE_FILE, 'wb') as output:
+    
     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    
     output.write('<osm>\n  ')
 
     # Write every 10th top level element
     for i, element in enumerate(get_element(OSM_FILE)):
+        
         if i % 10 == 0:
+            
             output.write(ET.tostring(element, encoding='utf-8'))
 
     output.write('</osm>')
+
 ```
 
 
@@ -1037,47 +1042,3 @@ pprint.pprint(list(result))
      {u'_id': u'Celebration', u'count': 4},
      {u'_id': u'Bay Lake', u'count': 2}]
     
-
-
-```python
-# Examine odd postal code
-result = db.aggregate([{'$match': {'address.postcode': '34769'}}])
-pprint.pprint(list(result))
-```
-
-    [{u'_id': ObjectId('56d4d330c608238d3f31a971'),
-      u'address': {u'city': u'Kissimmee',
-                   u'housenumber': u'1596',
-                   u'postcode': u'34769',
-                   u'state': u'FL',
-                   u'street': u'Cardinal Ct'},
-      u'amenity': u'fast_food',
-      u'brand': u"McDonald's",
-      u'building': u'yes',
-      u'created': {u'changeset': u'36562841',
-                   u'timestamp': u'2016-01-14T02:08:12Z',
-                   u'uid': u'1943612',
-                   u'user': u'valerietheblonde',
-                   u'version': u'11'},
-      u'cuisine': u'burger',
-      u'drive_through': u'yes',
-      u'id': u'44487609',
-      u'name': u"McDonald's",
-      u'node_refs': [u'565308195',
-                     u'565308196',
-                     u'3418546033',
-                     u'3418546034',
-                     u'3418546037',
-                     u'3418546036',
-                     u'3418546035',
-                     u'565308199',
-                     u'565308200',
-                     u'565308195'],
-      u'ref': u'21485',
-      u'type': u'way'}]
-    
-
-
-```python
-
-```

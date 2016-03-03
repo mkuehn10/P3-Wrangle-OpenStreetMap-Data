@@ -173,12 +173,12 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Lesson 6 - Iterative Parsing Code</span>
 <span class="c1">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># -*- coding: utf-8 -*- </span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Your task is to use the iterative parsing to process the map file and</span>
 <span class="sd">find out not only what tags are there, but also how many, to get the</span>
@@ -221,7 +221,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Lesson 6 - Tag Types code</span>
@@ -316,7 +316,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Lesson 6 - Exploring Users code</span>
@@ -382,15 +382,6 @@ div#notebook {
             <span class="n">users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">get_user</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">users</span><span class="p">,</span> <span class="n">usernames</span>
-
-<span class="c1"># def test():</span>
-
-<span class="c1">#     users, usernames = process_map_users(&#39;example3.osm&#39;)</span>
-<span class="c1">#     pprint.pprint(users)</span>
-<span class="c1">#     assert len(users) == 6</span>
-
-<span class="c1"># if __name__ == &quot;__main__&quot;:</span>
-<span class="c1">#     test()</span>
 </pre></div>
 
 </div>
@@ -400,7 +391,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Lesson 6 - Improving Street Names code</span>
@@ -493,6 +484,10 @@ div#notebook {
 <span class="sd">    Returns:</span>
 <span class="sd">        (boolean): True if the element is a postal code, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#if elem.attrib[&#39;k&#39;] == &quot;addr:postcode&quot;:</span>
+    <span class="c1">#    print &quot;found postal code&quot; + elem.attrib[&#39;v&#39;]</span>
+    <span class="c1">#else:</span>
+    <span class="c1">#    print &quot;not postal code &quot; + elem.attrib[&#39;v&#39;]</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;addr:postcode&quot;</span><span class="p">)</span>
 
 <span class="c1"># Exploring Postal Codes, City Names, and Latitude/Longitude</span>
@@ -535,17 +530,17 @@ div#notebook {
     
     <span class="n">out_of_bounds</span> <span class="o">=</span> <span class="p">[]</span>
     
-    
-    <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">ET</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">osm_file</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,)):</span>
-
+    <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">ET</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">osm_file</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">)):</span>
+        
         <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;node&quot;</span> <span class="ow">or</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;way&quot;</span><span class="p">:</span>
             
             <span class="k">if</span> <span class="s2">&quot;lat&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                
                     <span class="n">audit_lat_long</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
-                    
             
             <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">):</span>
-            
+                
+                
                 <span class="k">if</span> <span class="n">is_street_name</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
                     
                     <span class="n">audit_street_type</span><span class="p">(</span><span class="n">street_types</span><span class="p">,</span> <span class="n">tag</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
@@ -555,13 +550,12 @@ div#notebook {
                     <span class="n">cities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
                 
                 <span class="k">elif</span> <span class="n">is_postcode</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
-                    
+                
                     <span class="n">postcodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
-                            
+                           
     <span class="n">osm_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     
     <span class="k">return</span> <span class="n">street_types</span>
-
 
 <span class="k">def</span> <span class="nf">update_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -607,8 +601,8 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>set([&apos;Windermere&apos;, &apos;Bay Lake&apos;, &apos;Orlando&apos;, &apos;Lake Buena Vista,&apos;, &apos;Lake Buena Vista&apos;, &apos;Kissimmee&apos;, &apos;Davenport&apos;, &apos;Celebration&apos;])
-set([&apos;32821&apos;, &apos;32836&apos;, &apos;34786&apos;, &apos;34769&apos;, &apos;32830-8424&apos;, &apos;33896&apos;, &apos;32830-8400&apos;, &apos;FL 34747&apos;, &apos;34741&apos;, &apos;32832&apos;, &apos;32830&apos;, &apos;34747&apos;, &apos;34746&apos;])
+<pre>set([&apos;Windermere&apos;, &apos;Orlando&apos;, &apos;Lake Buena Vista,&apos;, &apos;Bay Lake&apos;, &apos;Kissimmee&apos;, &apos;Celebration&apos;, &apos;Davenport&apos;, &apos;Lake Buena Vista&apos;])
+set([&apos;32821&apos;, &apos;32836&apos;, &apos;32830-8446&apos;, &apos;34786&apos;, &apos;32830-8514&apos;, &apos;34769&apos;, &apos;32830-8424&apos;, &apos;32830-8421&apos;, &apos;33896&apos;, &apos;32830-8400&apos;, &apos;FL 34747&apos;, &apos;34741&apos;, &apos;32830-8433&apos;, &apos;32830-8411&apos;, &apos;32832&apos;, &apos;32830&apos;, &apos;34747&apos;, &apos;34746&apos;])
 </pre>
 </div>
 </div>
@@ -619,7 +613,7 @@ set([&apos;32821&apos;, &apos;32836&apos;, &apos;34786&apos;, &apos;34769&apos;,
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Code used to determine the maximum and minimum coordinates within the data set</span>
@@ -653,7 +647,7 @@ set([&apos;32821&apos;, &apos;32836&apos;, &apos;34786&apos;, &apos;34769&apos;,
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[108]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># Lesson 6 - Preparing for Database</span>
@@ -1610,7 +1604,7 @@ Name: Number of Contributions, dtype: float64
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="ch">#!/usr/bin/env python</span>
@@ -1632,20 +1626,29 @@ Name: Number of Contributions, dtype: float64
 <span class="sd">    http://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">context</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">osm_file</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">))</span>
+    
     <span class="n">_</span><span class="p">,</span> <span class="n">root</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    
     <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+        
         <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="s1">&#39;end&#39;</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            
             <span class="k">yield</span> <span class="n">elem</span>
+            
             <span class="n">root</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
-
+<span class="c1">#postals = set()</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SAMPLE_FILE</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+    
     <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
     <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;osm&gt;</span><span class="se">\n</span><span class="s1">  &#39;</span><span class="p">)</span>
 
     <span class="c1"># Write every 10th top level element</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">get_element</span><span class="p">(</span><span class="n">OSM_FILE</span><span class="p">)):</span>
+        
         <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            
             <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ET</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
 
     <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/osm&gt;&#39;</span><span class="p">)</span>
@@ -1732,77 +1735,6 @@ Name: Number of Contributions, dtype: float64
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[114]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c1"># Examine odd postal code</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([{</span><span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;address.postcode&#39;</span><span class="p">:</span> <span class="s1">&#39;34769&#39;</span><span class="p">}}])</span>
-<span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[{u&apos;_id&apos;: ObjectId(&apos;56d4d330c608238d3f31a971&apos;),
-  u&apos;address&apos;: {u&apos;city&apos;: u&apos;Kissimmee&apos;,
-               u&apos;housenumber&apos;: u&apos;1596&apos;,
-               u&apos;postcode&apos;: u&apos;34769&apos;,
-               u&apos;state&apos;: u&apos;FL&apos;,
-               u&apos;street&apos;: u&apos;Cardinal Ct&apos;},
-  u&apos;amenity&apos;: u&apos;fast_food&apos;,
-  u&apos;brand&apos;: u&quot;McDonald&apos;s&quot;,
-  u&apos;building&apos;: u&apos;yes&apos;,
-  u&apos;created&apos;: {u&apos;changeset&apos;: u&apos;36562841&apos;,
-               u&apos;timestamp&apos;: u&apos;2016-01-14T02:08:12Z&apos;,
-               u&apos;uid&apos;: u&apos;1943612&apos;,
-               u&apos;user&apos;: u&apos;valerietheblonde&apos;,
-               u&apos;version&apos;: u&apos;11&apos;},
-  u&apos;cuisine&apos;: u&apos;burger&apos;,
-  u&apos;drive_through&apos;: u&apos;yes&apos;,
-  u&apos;id&apos;: u&apos;44487609&apos;,
-  u&apos;name&apos;: u&quot;McDonald&apos;s&quot;,
-  u&apos;node_refs&apos;: [u&apos;565308195&apos;,
-                 u&apos;565308196&apos;,
-                 u&apos;3418546033&apos;,
-                 u&apos;3418546034&apos;,
-                 u&apos;3418546037&apos;,
-                 u&apos;3418546036&apos;,
-                 u&apos;3418546035&apos;,
-                 u&apos;565308199&apos;,
-                 u&apos;565308200&apos;,
-                 u&apos;565308195&apos;],
-  u&apos;ref&apos;: u&apos;21485&apos;,
-  u&apos;type&apos;: u&apos;way&apos;}]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre> 
-</pre></div>
-
-</div>
 </div>
 </div>
 

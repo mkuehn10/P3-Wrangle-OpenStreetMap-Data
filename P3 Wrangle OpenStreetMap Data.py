@@ -1,11 +1,11 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 # Lesson 6 - Iterative Parsing Code
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
 """
 Your task is to use the iterative parsing to process the map file and
 find out not only what tags are there, but also how many, to get the
@@ -41,7 +41,7 @@ def count_tags(filename):
         return counter
 
 
-# In[3]:
+# In[2]:
 
 # Lesson 6 - Tag Types code
 #!/usr/bin/env python
@@ -128,7 +128,7 @@ def process_map_keys(filename):
     return keys
 
 
-# In[4]:
+# In[18]:
 
 # Lesson 6 - Exploring Users code
 #!/usr/bin/env python
@@ -194,17 +194,8 @@ def process_map_users(filename):
 
     return users, usernames
 
-# def test():
 
-#     users, usernames = process_map_users('example3.osm')
-#     pprint.pprint(users)
-#     assert len(users) == 6
-
-# if __name__ == "__main__":
-#     test()
-
-
-# In[30]:
+# In[17]:
 
 # Lesson 6 - Improving Street Names code
 """
@@ -296,6 +287,10 @@ def is_postcode(elem):
     Returns:
         (boolean): True if the element is a postal code, False otherwise.
     """
+    #if elem.attrib['k'] == "addr:postcode":
+    #    print "found postal code" + elem.attrib['v']
+    #else:
+    #    print "not postal code " + elem.attrib['v']
     return (elem.attrib['k'] == "addr:postcode")
 
 # Exploring Postal Codes, City Names, and Latitude/Longitude
@@ -338,17 +333,17 @@ def audit(osmfile):
     
     out_of_bounds = []
     
-    
-    for event, elem in ET.iterparse(osm_file, events=("start",)):
-
+    for event, elem in ET.iterparse(osm_file, events=("start", "end")):
+        
         if elem.tag == "node" or elem.tag == "way":
             
             if "lat" in elem.attrib.keys():
+                
                     audit_lat_long(elem)
-                    
             
             for tag in elem.iter("tag"):
-            
+                
+                
                 if is_street_name(tag):
                     
                     audit_street_type(street_types, tag.attrib['v'])
@@ -358,13 +353,12 @@ def audit(osmfile):
                     cities.add(tag.attrib['v'])
                 
                 elif is_postcode(tag):
-                    
+                
                     postcodes.add(tag.attrib['v'])
-                            
+                           
     osm_file.close()
     
     return street_types
-
 
 def update_name(name, mapping):
     """
@@ -400,7 +394,7 @@ print cities
 print postcodes
 
 
-# In[31]:
+# In[6]:
 
 # Code used to determine the maximum and minimum coordinates within the data set
 print max(lats)
@@ -409,7 +403,7 @@ print max(lons)
 print min(lons)
 
 
-# In[108]:
+# In[7]:
 
 # Lesson 6 - Preparing for Database
 
@@ -826,7 +820,7 @@ print
 print float(contributor_counts_df['Number of Contributions'][0:10].sum()) /                                         contributor_counts_df['Number of Contributions'].sum() * 100
 
 
-# In[21]:
+# In[16]:
 
 #!/usr/bin/env python
 
@@ -847,20 +841,29 @@ def get_element(osm_file, tags=('node', 'way', 'relation')):
     http://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
     """
     context = ET.iterparse(osm_file, events=('start', 'end'))
+    
     _, root = next(context)
+    
     for event, elem in context:
+        
         if event == 'end' and elem.tag in tags:
+            
             yield elem
+            
             root.clear()
 
-
+#postals = set()
 with open(SAMPLE_FILE, 'wb') as output:
+    
     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    
     output.write('<osm>\n  ')
 
     # Write every 10th top level element
     for i, element in enumerate(get_element(OSM_FILE)):
+        
         if i % 10 == 0:
+            
             output.write(ET.tostring(element, encoding='utf-8'))
 
     output.write('</osm>')
@@ -876,16 +879,4 @@ pprint.pprint(list(result))
 
 result  = db.aggregate([{"$group":{"_id":"$address.city", "count":{"$sum":1}}}, {"$sort":{"count": -1}}])
 pprint.pprint(list(result))
-
-
-# In[114]:
-
-# Examine odd postal code
-result = db.aggregate([{'$match': {'address.postcode': '34769'}}])
-pprint.pprint(list(result))
-
-
-# In[ ]:
-
-
 
