@@ -1,16 +1,16 @@
-## [Wrangle OpenStreetMapData Report](P3 Wrangle OpenStreetMap Data Report.pdf)   
+## [Wrangle OpenStreetMapData Report](https://mkuehn10.github.io/portfolio/disney/)
 
 
 ```python
 # Lesson 6 - Iterative Parsing Code
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """
 Your task is to use the iterative parsing to process the map file and
 find out not only what tags are there, but also how many, to get the
 feeling on how much of which data you can expect to have in the map.
-Fill out the count_tags function. It should return a dictionary with the 
-tag name as the key and number of times this tag can be encountered in 
+Fill out the count_tags function. It should return a dictionary with the
+tag name as the key and number of times this tag can be encountered in
 the map as value.
 
 Note that your code will be tested with a different data file than the 'example.osm'
@@ -22,21 +22,21 @@ from collections import defaultdict
 def count_tags(filename):
         """
         Reads in an XML file and determines the count for each XML tag within the document.
-        
+
         Args:
             filename: The name of the XML file to iterate through
-            
+
         Returns:
             counter: A dictionary with the tag names as keys and the counts as values.
         """
         counter = defaultdict(int)
-        
+
         for line in ET.iterparse(filename):
-            
+
             current_tag = line[1].tag
-            
+
             counter[current_tag] += 1
-            
+
         return counter
 ```
 
@@ -79,49 +79,49 @@ problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 def key_type(element, keys):
     """
     Determines whether a tag's attribute matches a regular expression and counts how many tags fall within each category.
-    
+
     Args:
         element: An element from iterating over the XML file
         keys: A dictionary containing the classification names and counts as values.
-    
-    Returns: 
+
+    Returns:
         keys: A dictionary of classification names and counts.
     """
     if element.tag == "tag":
-        
+
         k = element.attrib['k']
-        
+
         if lower.search(k) != None:
-            
+
             keys['lower'] += 1
-            
+
         elif lower_colon.search(k) != None:
-            
+
             keys['lower_colon'] += 1
-            
+
         elif problemchars.search(k) != None:
-            
+
             keys['problemchars'] += 1
-            
+
         else:
             keys['other'] += 1
-            
+
     return keys
 
 def process_map_keys(filename):
     """
     Iterates through an XML file and creates a dictionary of keys and their counts.
-    
+
     Args:
         filename: An XML file.
-    
-    Returns: 
+
+    Returns:
         keys: A dictionary of classification names and counts as values.
     """
     keys = {"lower": 0, "lower_colon": 0, "problemchars": 0, "other": 0}
-    
+
     for _, element in ET.iterparse(filename):
-        
+
         keys = key_type(element, keys)
 
     return keys
@@ -146,11 +146,11 @@ The function process_map should return a set of unique user IDs ("uid")
 def get_user(element):
     """
     Returns the current tag's "uid" attribute.
-    
-    Args: 
+
+    Args:
         element: An XML element.
-    
-    Returns: 
+
+    Returns:
         The 'uid' attribute for that element.
     """
     return element.attrib['uid']
@@ -158,10 +158,10 @@ def get_user(element):
 def get_username(element):
     """
     Returns the current tag's "user" attribute.
-    
+
     Args:
         element: An XML element.
-    
+
     Returns:
         The 'user' attribute for that element.
     """
@@ -170,24 +170,24 @@ def get_username(element):
 def process_map_users(filename):
     """
     Iterates through an XML file and creates a set of unique user ids and usernames.
-    
+
     Args:
         filename: An XML file.
-    
+
     Returns:
         users: A set of unique user ids.
         usernames: A set of unique user names.
     """
     users = set()
-    
+
     usernames = set()
-    
+
     tags_with_uids = ['node', 'way', 'relation']
-    
+
     for _, element in ET.iterparse(filename):
-        
+
         if element.tag in tags_with_uids:
-            
+
             usernames.add(get_username(element))
             users.add(get_user(element))
 
@@ -200,7 +200,7 @@ def process_map_users(filename):
 """
 Your task in this exercise has two steps:
 
-- audit the OSMFILE and change the variable 'mapping' to reflect the changes needed to fix 
+- audit the OSMFILE and change the variable 'mapping' to reflect the changes needed to fix
     the unexpected street types to the appropriate ones in the expected list.
     You have to add mappings only for the actual problems you find in this OSMFILE,
     not a generalized solution, since that may and will depend on the particular area you are auditing.
@@ -218,13 +218,13 @@ OSMFILE = "example4.osm"
 # Matches the very last word in the street name
 street_type_re = re.compile(r'\b\S+\.?$', re.IGNORECASE)
 
-expected = ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square", "Lane", "Road", 
+expected = ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square", "Lane", "Road",
             "Trail", "Parkway", "Commons"]
 
 mapping = { "St": "Street",
             "St.": "Street",
             "Ave": "Avenue",
-            "Rd.": "Road"            
+            "Rd.": "Road"
             }
 
 
@@ -232,33 +232,33 @@ def audit_street_type(street_types, street_name):
     """
     Checks to see if the last word in the street name is in the expected list.  If it is not, then it adds this to a list for
     later review.
-    
+
     Args:
         street_types: A set of street types
         street_name: A street name taken from the "addr:street" attribute.
-    
+
     Returns:
         None
-    
+
     """
     m = street_type_re.search(street_name)
-    
+
     if m:
-        
+
         street_type = m.group()
-        
+
         if street_type not in expected:
-            
+
             street_types[street_type].add(street_name)
 
 
 def is_street_name(elem):
     """
     Checks to see whether or not the current tag's attribute is a street address
-    
+
     Args:
         elem: An XML element.
-    
+
     Returns:
         (boolean): True if the element is a street address, False otherwise.
     """
@@ -267,10 +267,10 @@ def is_street_name(elem):
 def is_city_name(elem):
     """
     Checks to see whether or not the current tag's attribute is a city
-    
+
     Args:
         elem: An XML element.
-    
+
     Returns:
         (boolean): True if the element is a city, False otherwise.
     """
@@ -279,10 +279,10 @@ def is_city_name(elem):
 def is_postcode(elem):
     """
     Checks to see whether or not the current tag's attribute is a postal code
-    
+
     Args:
         elem: An XML element.
-    
+
     Returns:
         (boolean): True if the element is a postal code, False otherwise.
     """
@@ -299,14 +299,14 @@ def is_postcode(elem):
 def audit_lat_long(elem):
     """
     Determines if coordinates within a tag fall outside of the expected coordinate bounds
-    
+
     Args:
-        elem: An XML element. 
+        elem: An XML element.
     """
     coords = {}
     lat = float(elem.attrib['lat'])
     lon = float(elem.attrib['lon'])
-    
+
     if lat <= 28.3323 or lat >= 28.4323 or lon <= -81.6152 or lon >= -81.5048:
         lats.append(lat)
         lons.append(lon)
@@ -318,69 +318,69 @@ def audit(osmfile):
     """
     Opens an XML file and looks for tags that are street names.  For tags that are streets, it checks the street types
     by calling the audit_street_type function.
-    
+
     Args:
         osmfile: An XML file.
-    
+
     Returns:
         street_types: A set of street types.
-    
+
     """
     osm_file = open(osmfile, "r")
-    
+
     street_types = defaultdict(set)
-    
+
     out_of_bounds = []
-    
+
     for event, elem in ET.iterparse(osm_file, events=("start", "end")):
-        
+
         if elem.tag == "node" or elem.tag == "way":
-            
+
             if "lat" in elem.attrib.keys():
-                
+
                     audit_lat_long(elem)
-            
+
             for tag in elem.iter("tag"):
-                
-                
+
+
                 if is_street_name(tag):
-                    
+
                     audit_street_type(street_types, tag.attrib['v'])
-                
+
                 elif is_city_name(tag):
-                    
+
                     cities.add(tag.attrib['v'])
-                
+
                 elif is_postcode(tag):
-                
+
                     postcodes.add(tag.attrib['v'])
-                           
+
     osm_file.close()
-    
+
     return street_types
 
 def update_name(name, mapping):
     """
     Updates a street type name based on the mapping.
-    
+
     Args:
         name: The street name.
         mapping: A dictionary with incorrect street types as keys and the correct street types as values.
-    
+
     Returns:
         (string): The updated street name based on the mapping.
-    
+
     """
     recombine = []
 
     for split_name in name.split(' '):
-        
+
         if split_name in mapping.keys():
-            
+
             split_name = mapping[split_name]
-            
+
         recombine.append(split_name)
-        
+
     return " ".join(recombine)
 
 # Check to see the unique city names and post codes in the OSM file
@@ -395,7 +395,7 @@ print postcodes
 
     set(['Windermere', 'Orlando', 'Lake Buena Vista,', 'Bay Lake', 'Kissimmee', 'Celebration', 'Davenport', 'Lake Buena Vista'])
     set(['32821', '32836', '32830-8446', '34786', '32830-8514', '34769', '32830-8424', '32830-8421', '33896', '32830-8400', 'FL 34747', '34741', '32830-8433', '32830-8411', '32832', '32830', '34747', '34746'])
-    
+
 
 
 ```python
@@ -410,7 +410,7 @@ print min(lons)
     28.2430014
     -81.5070083
     -81.64
-    
+
 
 
 ```python
@@ -455,12 +455,12 @@ You have to complete the function 'shape_element'.
 We have provided a function that will parse the map file, and call the function with the element
 as an argument. You should return a dictionary, containing the shaped data for that element.
 We have also provided a way to save the data in a file, so that you could use
-mongoimport later on to import the shaped data into MongoDB. 
+mongoimport later on to import the shaped data into MongoDB.
 
 Note that in this exercise we do not use the 'update street name' procedures
 you worked on in the previous exercise. If you are using this code in your final
-project, you are strongly encouraged to use the code from previous exercise to 
-update the street names before you save them to JSON. 
+project, you are strongly encouraged to use the code from previous exercise to
+update the street names before you save them to JSON.
 
 In particular the following things should be done:
 - you should process only 2 types of top level tags: "node" and "way"
@@ -468,7 +468,7 @@ In particular the following things should be done:
     * attributes in the CREATED array should be added under a key "created"
     * attributes for latitude and longitude should be added to a "pos" array,
       for use in geospacial indexing. Make sure the values inside "pos" array are floats
-      and not strings. 
+      and not strings.
 - if the second level tag "k" value contains problematic characters, it should be ignored
 - if the second level tag "k" value starts with "addr:", it should be added to a dictionary "address"
 - if the second level tag "k" value does not start with "addr:", but contains ":", you can
@@ -514,152 +514,152 @@ CREATED = [ "version", "changeset", "timestamp", "user", "uid"]
 def is_address(elem):
     """
     Determines whether or not an element is an address.
-    
+
     Args:
         elem: An XML element.
-    
+
     Returns:
         True if the element attribute starts with 'addr:'
-    
+
     """
     if elem.attrib['k'][:5] == "addr:":
-        
+
         return True
-    
+
 def shape_element(element):
     """
     Transforms the XML data into the format specified above as a list of dictionaries.
-    
+
     Args:
         element: An XML element.
-    
+
     Returns:
         node: A dictionary in the correct format for the element.
     """
     node = {}
-    
+
     if element.tag == "node" or element.tag == "way":
-        
+
         address_info = {}
-        
+
         nd_info = []
-        
+
         node["type"] = element.tag
-        
+
         node["id"] = element.attrib["id"]
-        
+
         if "visible" in element.attrib.keys():
-            
+
             node["visible"] = element.attrib["visible"]
-            
+
         if "lat" in element.attrib.keys():
-            
+
             node["pos"] = [float(element.attrib['lat']), float(element.attrib['lon'])]
-            
+
         node["created"] = {"version": element.attrib['version'],
                             "changeset": element.attrib['changeset'],
                             "timestamp": element.attrib['timestamp'],
                             "uid": element.attrib['uid'],
                             "user": element.attrib['user']}
-        
+
         for tag in element.iter("tag"):
-            
+
             p = problemchars.search(tag.attrib['k'])
-            
+
             if p:
-                
+
                 continue
-                
+
             elif is_address(tag):
-                
+
                 if ":" in tag.attrib['k'][5:]:
-                    
+
                     continue
-                    
+
                 else:
-                    
+
                     if tag.attrib['k'][5:] == 'street':
-                        
+
                         better_name = update_name(name, mapping)
-                        
+
                         address_info[tag.attrib['k'][5:]] = better_name
-                    
+
                     elif tag.attrib['k'][5:] == 'city':
-                        
+
                         address_info[tag.attrib['k'][5:]] = tag.attrib['v'].strip(', ')
-                    
+
                     elif tag.attrib['k'][5:] == 'postcode':
-                        
+
                         m = re.search('(\d{5})([- ])?(\d{4})?', tag.attrib['v'])
-                        
+
                         if m.group(3) == None:
-                            
+
                             address_info[tag.attrib['k'][5:]] = m.group(1)
-                            
+
                         else:
-                            
+
                             address_info[tag.attrib['k'][5:]] = m.group(1) + '-' + m.group(3)
-                        
+
                     else:
-                        
+
                         address_info[tag.attrib['k'][5:]] = tag.attrib['v']
-                    
+
             else:
-                
+
                 node[tag.attrib['k']] = tag.attrib['v']
-                
+
         if address_info != {}:
-            
+
             node['address'] = address_info
-            
+
         for tag2 in element.iter("nd"):
-            
+
             nd_info.append(tag2.attrib['ref'])
-            
+
         if nd_info != []:
-            
+
             node['node_refs'] = nd_info
-            
+
         return node
-    
+
     else:
         return None
-    
+
 def process_map(file_in, pretty = False):
     """
     Parses an XML file and transforms each element into the correct dictionary format.  Writes the transformed elements into
     a list which is then written to a JSON file.
-    
+
     Args:
         file_in: The XML file to process.
         pretty: Default false.  Determines how the JSON is output into the file.
-    
+
     Returns:
         data: A list of dictionaries of the transformed data.
-    
+
     """
     file_out = "{0}.json".format(file_in)
-    
+
     data = []
-    
+
     with codecs.open(file_out, "w") as fo:
-        
+
         for _, element in ET.iterparse(file_in):
-            
+
             el = shape_element(element)
-            
+
             if el:
-                
+
                 data.append(el)
-                
+
                 if pretty:
-                    
+
                     fo.write(json.dumps(el, indent=2)+"\n")
-                    
+
                 else:
-                    
+
                     fo.write(json.dumps(el) + "\n")
-                    
+
     return data
 ```
 
@@ -671,7 +671,7 @@ pprint.pprint(tags)
 ```
 
     defaultdict(<type 'int'>, {'node': 345665, 'nd': 421210, 'bounds': 1, 'member': 5864, 'tag': 121848, 'relation': 587, 'way': 28048, 'osm': 1})
-    
+
 
 
 ```python
@@ -681,7 +681,7 @@ pprint.pprint(keys)
 ```
 
     {'lower': 111070, 'lower_colon': 9007, 'other': 1768, 'problemchars': 3}
-    
+
 
 
 ```python
@@ -693,8 +693,8 @@ users, usernames = process_map_users('walt-disney-world_florida.osm')
 
 ```python
 # Modify the expected street types list to include Circle, Way, and Highway
-expected = ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square", "Lane", "Road", 
-            "Trail", "Parkway", "Commons", "Circle", "Way", "Highway"] 
+expected = ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square", "Lane", "Road",
+            "Trail", "Parkway", "Commons", "Circle", "Way", "Highway"]
 
 # Modify the street type mappings to account for Blvd, Ct, and Ln
 mapping = { "St": "Street",
@@ -731,7 +731,7 @@ for st_type, ways in st_types.iteritems():
     Archfeld Blvd => Archfeld Boulevard
     International Drive South => International Drive South
     Cardinal Ct => Cardinal Court
-    
+
 
 
 ```python
@@ -744,18 +744,18 @@ data = process_map('walt-disney-world_florida.osm', True)
 def get_db():
     """
     Creates a connection to a MongoDB that contains the imported clean data
-    
+
     Args: None
-    
+
     Returns: The wdw collection from the openstreet database
-    
+
     """
     from pymongo import MongoClient
-    
+
     client = MongoClient('localhost:27017')
-    
+
     db = client.openstreet.wdw
-    
+
     return db
 
 # The JSON file was imported into MongoDB via the command line.  This will store the db for use with Python.
@@ -799,7 +799,7 @@ pprint.pprint(list(result)[:10])
      {u'_id': u'atm', u'count': 64},
      {u'_id': u'swimming_pool', u'count': 45},
      {u'_id': u'bar', u'count': 36}]
-    
+
 
 
 ```python
@@ -811,11 +811,11 @@ import seaborn as sns
 def descriptive_statistics(dataFrame, column):
     """
     Description
-    
+
     Args:
-    
+
     Returns:
-    
+
     """
     print column + " Summary Statistics"
     print "Mean:",dataFrame[column].mean()
@@ -882,8 +882,8 @@ plt.show()
     Lower Quartile: 2.0
     Upper Quartile: 92.0
     Sum: 373713
-    
-    
+
+
 
 
 ![png](output_14_1.png)
@@ -947,9 +947,9 @@ print float(contributor_counts_df['Number of Contributions'][0:10].sum()) / \
     8     1.649126
     9     1.280127
     Name: Number of Contributions, dtype: float64
-    
+
     90.3425890991
-    
+
 
 
 ```python
@@ -967,34 +967,34 @@ SAMPLE_FILE = "sample.osm"
 
 def get_element(osm_file, tags=('node', 'way', 'relation')):
     """Yield element if it is the right type of tag
-    
+
     Reference:
     http://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
     """
     context = ET.iterparse(osm_file, events=('start', 'end'))
-    
+
     _, root = next(context)
-    
+
     for event, elem in context:
-        
+
         if event == 'end' and elem.tag in tags:
-            
+
             yield elem
-            
+
             root.clear()
 
 #postals = set()
 with open(SAMPLE_FILE, 'wb') as output:
-    
+
     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    
+
     output.write('<osm>\n  ')
 
     # Write every 10th top level element
     for i, element in enumerate(get_element(OSM_FILE)):
-        
+
         if i % 10 == 0:
-            
+
             output.write(ET.tostring(element, encoding='utf-8'))
 
     output.write('</osm>')
@@ -1025,7 +1025,7 @@ pprint.pprint(list(result))
      {u'_id': u'32830-8433', u'count': 1},
      {u'_id': u'32830-8400', u'count': 1},
      {u'_id': u'32830-8446', u'count': 1}]
-    
+
 
 
 ```python
@@ -1041,4 +1041,4 @@ pprint.pprint(list(result))
      {u'_id': u'Davenport', u'count': 8},
      {u'_id': u'Celebration', u'count': 4},
      {u'_id': u'Bay Lake', u'count': 2}]
-    
+
