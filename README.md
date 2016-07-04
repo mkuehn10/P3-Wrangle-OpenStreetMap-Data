@@ -1,4 +1,4 @@
-## [Wrangle OpenStreetMapData Report](https://mkuehn10.github.io/portfolio/disney/)
+## [Wrangle OpenStreetMapData Report](https://mkuehn10.github.io/portfolio/disney/index.html)
 
 
 ```python
