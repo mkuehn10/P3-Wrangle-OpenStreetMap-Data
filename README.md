@@ -1,4 +1,4 @@
-## [Wrangle OpenStreetMapData Report](https://github.com/mkuehn10/P3-Wrangle-OpenStreetMap-Data/blob/master/P3%20Wrangle%20OpenStreetMap%20Data%20Report.pdf)
+## [Wrangle OpenStreetMapData Report](http://www.mikekuehn.com/P3-Wrangle-OpenStreetMap-Data/index.html)
 
 
 ```python
